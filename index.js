@@ -12,7 +12,9 @@ class ResourceController {
    */
   async index({ request, response, view, params, Model, auth }) {
     const query = JSON.parse(request.input('query', '{}'))
-    const data = Model.query(query).paginate(query.page || 1, query.perPage || 10)
+    const key = Object.keys(query.sort)[0]
+    const sort = query.sort[key] != -1 ? 'asc': 'desc'
+    const data = Model.query(query).orderBy(key, sort).paginate(query.page || 1, query.perPage || 10)
     return data
   }
 
